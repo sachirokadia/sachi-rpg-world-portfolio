@@ -17,7 +17,7 @@ about:{html:function(){return head('⛲','Sachi Chirag Rokadia','Fountain Plaza 
  '<div class="tickets single">'+
  ticket({t:'🎓 Education',sub:'ITM (SLS) Baroda University',body:'B.Tech in Computer Science &amp; Engineering · 2024 – 2028 · Vadodara, Gujarat, India.'})+
  ticket({t:'✨ What I Build',body:'AI-powered web applications — a real-time sign-language translator that runs fully on-device, a full-stack AI study platform, a civic intelligence platform, a society management system, and a gamified finance tracker. Explore each building on the map!'} )+
- '</div><div class="panel-cta-row"><a class="cta" href="resume.pdf" download>⬇ Download Resume</a><button class="cta secondary" data-open="overview">🗺️ View All Zones</button></div>'}},
+ '</div>'+tourGuide('about')+'<div class="panel-cta-row"><a class="cta" href="resume.pdf" download>⬇ Download Resume</a><button class="cta secondary" data-open="overview">🗺️ View All Zones</button></div>'}},
 
 signspeak:{html:function(){return head('🤟','SignSpeak AI','Real-Time Sign Language Translation')+
  '<div class="tickets single">'+ticket({t:'SignSpeak AI',sub:'Real-time sign-language translation PWA',
@@ -28,7 +28,7 @@ signspeak:{html:function(){return head('🤟','SignSpeak AI','Real-Time Sign Lan
    '47 automated tests.',
    'Gesture Studio — train custom gestures from webcam samples, with models persisted in-browser via IndexedDB.',
    'Live performance HUD, two-way conversation mode, and a guided Learn mode.'],
-  cta:{href:'https://github.com/sachirokadia/signspeak-ai',label:'⌥ View on GitHub'}})+'</div>'}},
+  cta:{href:'https://github.com/sachirokadia/signspeak-ai',label:'⌥ View on GitHub'}})+'</div>'+tourGuide('signspeak')+tourActions('signspeak')}},
 
 studygen:{html:function(){return head('📚','StudyGen AI','AI Study Companion')+
  '<div class="tickets single">'+ticket({t:'StudyGen AI',sub:'Full-stack AI study platform · also a signed Android APK via Capacitor',
@@ -38,7 +38,7 @@ studygen:{html:function(){return head('📚','StudyGen AI','AI Study Companion')
    'SM-2 spaced-repetition flashcards and timed quizzes with explanations.',
    'Three-level Ask-AI explainer, focus timer, JWT auth, and a personal deck library.',
    'Bilingual English / Hindi UI. Deployed on Vercel with an Express serverless backend.'],
-  cta:{href:'https://github.com/sachirokadia/studygen-ai',label:'⌥ View on GitHub'}})+'</div>'}},
+  cta:{href:'https://github.com/sachirokadia/studygen-ai',label:'⌥ View on GitHub'}})+'</div>'+tourGuide('studygen')+tourActions('studygen')}},
 
 janmind:{html:function(){return head('🏛️','JanMind','Civic Intelligence Platform')+
  '<div class="tickets single">'+ticket({t:'JanMind',sub:'Smart India Hackathon \u201926 · College round cleared',
@@ -47,14 +47,14 @@ janmind:{html:function(){return head('🏛️','JanMind','Civic Intelligence Pla
    'Civic intelligence platform for citizen complaints, with AI-powered analysis of government administration.',
    'Glassmorphism UI in an Indian civic visual language.',
    'Cleared the college-level round of Smart India Hackathon \u201926 with the team.'],
-  cta:{href:'https://github.com/Maher-Bhatt/Civic-Sathi',label:'⌥ View on GitHub'}})+'</div>'}},
+  cta:{href:'https://github.com/Maher-Bhatt/Civic-Sathi',label:'⌥ View on GitHub'}})+'</div>'+tourGuide('janmind')+tourActions('janmind')}},
 
 sociotrack:{html:function(){return head('🏘️','SocioTrack','Residential Society Management System')+
  '<div class="tickets single">'+ticket({t:'SocioTrack',sub:'Built by a two-person team',
   chips:[{t:'React'},{t:'TypeScript'},{t:'Node.js'},{t:'Express.js'},{t:'MongoDB'},{t:'JWT + bcrypt',w:true}],
   bullets:[
    'Society management — complaints, technician assignment, notices and alerts — replacing WhatsApp coordination.',
-   'JWT auth with bcrypt and role-based access for residents, administrators and technicians.']})+'</div>'}},
+   'JWT auth with bcrypt and role-based access for residents, administrators and technicians.']})+'</div>'+tourGuide('sociotrack')+tourActions('sociotrack')}},
 
 fingame:{html:function(){return head('🎮','FinGame','Gamified Personal Finance Tracker')+
  '<div class="tickets single">'+ticket({t:'FinGame',sub:'RPG-style finance tracker',
@@ -63,7 +63,7 @@ fingame:{html:function(){return head('🎮','FinGame','Gamified Personal Finance
    'Turns saving into quests, XP, levels, badges and leaderboards.',
    'JWT auth, expense tracking with category budgets, a quest engine with level maps and friend rankings, and a badge hall of fame.',
    'Recharts spending visualizations.'],
-  cta:{href:'https://github.com/sachirokadia/FinGame',label:'⌥ View on GitHub'}})+'</div>'}},
+  cta:{href:'https://github.com/sachirokadia/FinGame',label:'⌥ View on GitHub'}})+'</div>'+tourGuide('fingame')+tourActions('fingame')}},
 
 skills:{html:function(){return head('🛠️','Skills','Skills Workshop')+
  '<div class="tickets">'+
@@ -73,7 +73,7 @@ skills:{html:function(){return head('🛠️','Skills','Skills Workshop')+
  ticket({t:'🗄️ Databases & ORMs',bullets:['MongoDB','MySQL','PostgreSQL (Neon)','SQLite','Prisma','Mongoose','Drizzle ORM']})+
  ticket({t:'🤖 AI / ML',bullets:['MediaPipe Tasks Vision','ONNX Runtime','OpenAI API','Claude API']})+
  ticket({t:'🧰 Tools',bullets:['Git','GitHub','Vercel','PHPUnit','AI-assisted development (Kiro, Lovable)']})+
- '</div>'}},
+ '</div>'+tourGuide('skills')+tourActions('skills')}},
 
 achievements:{html:function(){return head('🏆','Achievements','Trophy Well')+
  '<div class="tickets single">'+
@@ -81,7 +81,7 @@ achievements:{html:function(){return head('🏆','Achievements','Trophy Well')+
  ticket({t:'🚀 Smart India Hackathon \u201926',body:'Cleared the college-level round with JanMind.'})+
  ticket({t:'🏁 VCET Hackathon \u201925 — “Race to the Future”',body:'Working prototype for future-urban challenges, built in a 24-hour hackathon.'})+
  ticket({t:'📜 Certifications',bullets:['Database Foundations — Oracle Academy, 2024','Java Fundamentals — Oracle Academy']})+
- '</div>'}},
+ '</div>'+tourGuide('achievements')+tourActions('achievements')}},
 
 contact:{html:function(){return head('🍊','Contact','Contact Tree')+
  '<p class="panel-intro">Open to internships (full-stack / web / AI). The fastest way to reach me is email.</p>'+
@@ -90,16 +90,40 @@ contact:{html:function(){return head('🍊','Contact','Contact Tree')+
  '<div class="contact-row"><small>LinkedIn</small><a href="https://www.linkedin.com/in/sachi-rokadia-9348b8320" target="_blank" rel="noopener">linkedin.com/in/sachi-rokadia-9348b8320</a></div>'+
  '<div class="contact-row"><small>GitHub</small><a href="https://github.com/sachirokadia" target="_blank" rel="noopener">github.com/sachirokadia</a></div>'+
  '<div class="contact-row"><small>Location</small>Vadodara, Gujarat, India</div>'+
- '</div><a class="cta" href="resume.pdf" download>⬇ Download Resume</a>'}},
+ '</div><a class="cta" href="resume.pdf" download>⬇ Download Resume</a>'+tourGuide('contact')+tourActions('contact')}},
 
 overview:{html:function(){
  var zones=[['about','⛲ About','Fountain Plaza · who I am'],['signspeak','🤟 SignSpeak AI','Real-time sign language translation'],['studygen','📚 StudyGen AI','AI study companion'],['janmind','🏛️ JanMind','Civic intelligence platform'],['sociotrack','🏘️ SocioTrack','Society management system'],['fingame','🎮 FinGame','Gamified finance tracker'],['skills','🛠️ Skills','Languages, stack & tools'],['achievements','🏆 Achievements','Hackathons & certifications'],['contact','🍊 Contact','Email, LinkedIn & GitHub']];
  return head('🗺️','Portfolio','Every zone in Sachi\u2019s World')+
  '<p class="panel-intro">Jump straight to a building — the camera will fly there and open its panel.</p><div class="jump-grid">'+
  zones.map(function(z){return '<button class="jump-btn" data-jump="'+z[0]+'">'+z[1]+'<span>'+z[2]+'</span></button>'}).join('')+
- '</div><a class="cta" href="resume.pdf" download>⬇ Download Resume</a>'}}
+ '</div>'+tourGuide('overview')+tourActions('overview')+'<a class="cta" href="resume.pdf" download>⬇ Download Resume</a>'}}
 };
 
+
+/* ---------- Sequential tour: cute guide + Next stop ---------- */
+var TOUR_ORDER=['about','signspeak','studygen','janmind','sociotrack','fingame','skills','achievements','contact'];
+var TOUR_META={
+ about:{e:'⛲',n:'About',s:'Fountain Plaza · who I am'},
+ signspeak:{e:'🤟',n:'SignSpeak AI',s:'Real-time sign language translation'},
+ studygen:{e:'📚',n:'StudyGen AI',s:'AI study companion'},
+ janmind:{e:'🏛️',n:'JanMind',s:'Civic intelligence platform'},
+ sociotrack:{e:'🏘️',n:'SocioTrack',s:'Society management system'},
+ fingame:{e:'🎮',n:'FinGame',s:'Gamified finance tracker'},
+ skills:{e:'🛠️',n:'Skills',s:'Languages, stack & tools'},
+ achievements:{e:'🏆',n:'Achievements',s:'Hackathons & certifications'},
+ contact:{e:'🍊',n:'Contact',s:'Email, LinkedIn & GitHub'}};
+function tourNext(id){var i=TOUR_ORDER.indexOf(id);return TOUR_ORDER[(i+1)%TOUR_ORDER.length]}
+function tourGuide(id){
+  var n=tourNext(id),m=TOUR_META[n];
+  var eyebrow=id==='overview'?'🐾 Your guide has a route planned!':id==='contact'?'🐾 Last stop — then the tour loops back!':'🐾 Next stop on the tour · stop '+(TOUR_ORDER.indexOf(n)+1)+' of 9';
+  var label=id==='overview'?'Start the tour →':id==='contact'?'Next: About ↻':'Next: '+m.n+' →';
+  return '<div class="tour-bar"><img class="tour-guide" src="assets/avatar.webp" alt="" draggable="false"><div class="tour-bubble"><span class="tour-eyebrow">'+eyebrow+'</span><span><strong>'+m.e+' '+m.n+'</strong> — '+m.s+'</span></div><button class="cta" data-next="'+n+'">'+label+'</button></div>';
+}
+function tourActions(id){
+  if(id==='overview')return '';
+  return '<div class="tour-actions"><button class="cta secondary" data-open="overview">🗺️ View All Zones</button></div>';
+}
 
 /* ---------- Walking avatar ---------- */
 var avatarEl=document.getElementById('avatar');
@@ -137,6 +161,7 @@ function closePanel(){
 }
 function bindPanelButtons(){
   panelContent.querySelectorAll('[data-open]').forEach(function(b){b.addEventListener('click',function(){openPanel(b.getAttribute('data-open'))})});
+  panelContent.querySelectorAll('[data-next]').forEach(function(b){b.addEventListener('click',function(){var id=b.getAttribute('data-next'); closePanel(); focusZone(id,true);})});
   panelContent.querySelectorAll('[data-jump]').forEach(function(b){b.addEventListener('click',function(){var id=b.getAttribute('data-jump'); closePanel(); focusZone(id,true);})});
 }
 document.getElementById('back-btn').addEventListener('click',closePanel);

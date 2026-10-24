@@ -143,3 +143,14 @@ button{font-family:inherit;cursor:pointer}
   .bf-wl,.bf-wr,#avatar.walking img{animation:none!important}
   #avatar{transition:none!important}
 }
+
+/* ===== Sequential tour guide ===== */
+.tour-bar{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-top:20px;background:linear-gradient(180deg,#FFFDF4,#FFEDBE);border:3px solid #EAD9A8;border-radius:22px;padding:10px 14px;box-shadow:inset 0 2px 0 #fff,0 6px 14px rgba(74,50,38,.10)}
+.tour-bar .cta{margin-top:0;white-space:nowrap;margin-left:auto}
+.tour-guide{width:54px;height:54px;object-fit:cover;border-radius:50%;border:3px solid #E3D3AC;background:#FFF6DC;flex:none}
+.tour-bubble{flex:1;min-width:0;font-size:14.5px;line-height:1.4;color:#5C4216}
+.tour-eyebrow{display:block;font-size:11.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#B07A2E;margin-bottom:2px}
+.tour-bubble strong{color:#4A2C15}
+.tour-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.tour-actions .cta{margin-top:0}
+@media (max-width:640px){.tour-guide{width:44px;height:44px}}

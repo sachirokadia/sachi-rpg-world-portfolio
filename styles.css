@@ -154,3 +154,9 @@ button{font-family:inherit;cursor:pointer}
 .tour-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
 .tour-actions .cta{margin-top:0}
 @media (max-width:640px){.tour-guide{width:44px;height:44px}}
+
+/* ===== Walking motion: dust puffs + sparkles ===== */
+.walk-puff{position:absolute;width:26px;height:15px;margin-left:-13px;margin-top:-8px;background:radial-gradient(ellipse at center,rgba(255,252,240,.95),rgba(232,214,170,.55) 55%,transparent 72%);border-radius:50%;filter:blur(1px);z-index:5;pointer-events:none;animation:puffUp .7s ease-out forwards}
+@keyframes puffUp{from{transform:translateY(0) scale(.6);opacity:.9}to{transform:translateY(-16px) scale(1.5);opacity:0}}
+.walk-sparkle{position:absolute;width:11px;height:11px;margin-left:-5px;margin-top:-5px;background:radial-gradient(circle,#FFF7CC 0%,#FFD94A 55%,#FF9A3D 100%);border-radius:2px;box-shadow:0 0 10px rgba(255,200,60,.9);z-index:7;pointer-events:none;animation:sparklePop .7s ease-out forwards}
+@keyframes sparklePop{0%{transform:rotate(45deg) scale(0);opacity:0}35%{transform:rotate(45deg) scale(1.25);opacity:1}100%{transform:rotate(45deg) translateY(-26px) scale(.4);opacity:0}}

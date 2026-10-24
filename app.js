@@ -128,19 +128,85 @@ function tourActions(id){
 /* ---------- Walking avatar ---------- */
 var avatarEl=document.getElementById('avatar');
 var AVATAR_POS={about:[1560,680],janmind:[1000,780],achievements:[2390,745],studygen:[640,1180],signspeak:[1640,1160],sociotrack:[2330,1090],fingame:[650,1590],skills:[2180,1560],contact:[2280,1490],overview:[1620,1580]};
-var avatarCur={x:1450,y:420}, walkTimer=null;
+var avatarCur={x:parseInt(avatarEl.style.left)||1560,y:parseInt(avatarEl.style.top)||700};
 var reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var walkRaf=null, walkTarget=null, lastPuffT=0, lastSparkT=0;
+function spawnFx(cls,x,y){
+  var s=document.createElement('div'); s.className=cls;
+  s.style.left=x+'px'; s.style.top=y+'px'; world.appendChild(s);
+  setTimeout(function(){if(s.parentNode)s.parentNode.removeChild(s)},850);
+}
+function spawnPuff(x,y){spawnFx('walk-puff',x+(Math.random()*26-13),y-4+(Math.random()*6-3))}
+function spawnSparkle(x,y,spread){spawnFx('walk-sparkle',x+(Math.random()*2-1)*spread,y-30+(Math.random()*2-1)*spread)}
+function burst(x,y){
+  for(var i=0;i<9;i++){
+    (function(dx,dy,delay){setTimeout(function(){spawnFx('walk-sparkle',x+dx,y+dy)},delay)})(Math.cos(i/9*2*Math.PI)*48,Math.sin(i/9*2*Math.PI)*48-24,i*45);
+  }
+}
+function arrivalHop(x,y){
+  if(reducedMotion)return;
+  var t0=performance.now(), dur=520;
+  function step(t){
+    var p=Math.min(1,(t-t0)/dur);
+    var hop=Math.abs(Math.sin(p*Math.PI*2))*16;
+    avatarEl.style.transform='translate(-50%,-100%) scaleX(var(--flip,1)) translateY('+(-hop)+'px)';
+    if(p<1){walkRaf=requestAnimationFrame(step)}
+    else{walkRaf=null; avatarEl.style.transform=''; avatarEl.style.transition='';}
+  }
+  walkRaf=requestAnimationFrame(step);
+  burst(x,y);
+}
 function moveAvatar(id){
   if(!avatarEl)return;
   var p=AVATAR_POS[id]||AVATAR_POS.about;
-  if(p[0]!==avatarCur.x)avatarEl.style.setProperty('--flip', p[0]<avatarCur.x?-1:1);
-  avatarCur={x:p[0],y:p[1]};
-  avatarEl.style.left=p[0]+'px'; avatarEl.style.top=p[1]+'px';
-  if(!reducedMotion){
-    avatarEl.classList.add('walking');
-    clearTimeout(walkTimer);
-    walkTimer=setTimeout(function(){avatarEl.classList.remove('walking')},720);
+  if(walkTarget===id && walkRaf)return; /* already strolling there */
+  if(walkRaf)cancelAnimationFrame(walkRaf);
+  walkTarget=id;
+  var sx=avatarCur.x, sy=avatarCur.y, dx=p[0]-sx, dy=p[1]-sy;
+  var dist=Math.hypot(dx,dy);
+  if(dx!==0)avatarEl.style.setProperty('--flip', dx<0?-1:1);
+  if(reducedMotion || dist<8){
+    avatarCur={x:p[0],y:p[1]};
+    avatarEl.style.transition='none';
+    avatarEl.style.left=p[0]+'px'; avatarEl.style.top=p[1]+'px';
+    void avatarEl.offsetWidth; avatarEl.style.transition='';
+    avatarEl.style.transform=''; walkTarget=null; walkRaf=null;
+    return;
   }
+  if(dist<40){ /* already there: just do the happy hop */
+    avatarCur={x:p[0],y:p[1]};
+    avatarEl.style.left=p[0]+'px'; avatarEl.style.top=p[1]+'px';
+    walkTarget=null; arrivalHop(p[0],p[1]);
+    return;
+  }
+  /* Curved strolling path: a gentle arc that bows downward, away from the river,
+     so she wanders along the ground instead of gliding in a straight line. */
+  var mx=(sx+p[0])/2, my=(sy+p[1])/2;
+  var nx=-dy/dist, ny=dx/dist, mag=Math.min(180,Math.max(50,dist*0.18));
+  if(ny<0){nx=-nx; ny=-ny;}
+  var cx=mx+nx*mag, cy=my+ny*mag;
+  var dur=Math.min(2400,Math.max(550,dist/620*1000));
+  var steps=Math.max(3,Math.round(dist/85));
+  var t0=performance.now();
+  avatarEl.style.transition='none'; /* positions are driven frame-by-frame now */
+  function frame(t){
+    var raw=Math.min(1,(t-t0)/dur);
+    var e=raw*raw*(3-2*raw); /* smoothstep: soft start, soft landing */
+    var u=1-e;
+    var x=u*u*sx + 2*u*e*cx + e*e*p[0];
+    var y=u*u*sy + 2*u*e*cy + e*e*p[1];
+    avatarCur={x:x,y:y};
+    avatarEl.style.left=x+'px'; avatarEl.style.top=y+'px';
+    var ph=e*steps;
+    var bob=Math.abs(Math.sin(ph*Math.PI))*9; /* little bounce on every step */
+    var waddle=Math.sin(ph*Math.PI*2)*3.5; /* side-to-side waddle */
+    avatarEl.style.transform='translate(-50%,-100%) scaleX(var(--flip,1)) translateY('+(-bob)+'px) rotate('+waddle+'deg)';
+    if(t-lastPuffT>120){lastPuffT=t; spawnPuff(x,y);}
+    if(t-lastSparkT>340){lastSparkT=t; spawnSparkle(x,y,26);}
+    if(raw<1){walkRaf=requestAnimationFrame(frame)}
+    else{walkRaf=null; walkTarget=null; avatarEl.style.transform=''; avatarEl.style.transition=''; arrivalHop(p[0],p[1]);}
+  }
+  walkRaf=requestAnimationFrame(frame);
 }
 
 /* ---------- Panel logic ---------- */
@@ -205,6 +271,7 @@ function focusZone(id,openAfter){
   var targetScale=Math.max(cam.scale, Math.min(0.85, Math.max(vw,vh)/1100));
   if(window.innerWidth<=640)targetScale=0.62;
   var tx=vw/2-pos[0]*targetScale, ty=vh/2-pos[1]*targetScale;
+  if(openAfter)moveAvatar(id); /* she starts walking while the camera flies */
   animateCamTo(tx,ty,targetScale,function(){
     var el=document.querySelector('[data-zone="'+id+'"]');
     if(el){el.classList.add('highlight'); setTimeout(function(){el.classList.remove('highlight')},2200);}

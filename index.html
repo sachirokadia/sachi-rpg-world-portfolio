@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+<title>Sachi's World — RPG Portfolio | Sachi Chirag Rokadia</title>
+<meta name="description" content="Portfolio of Sachi Chirag Rokadia — B.Tech CSE student building AI-powered web apps. Explore the RPG world map.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏰</text></svg>">
+</head>
+<body>
+<div id="app">
+  <!-- Top chrome -->
+  <header class="chrome-top">
+    <div class="title-plaque">🐾 Sachi's World</div>
+    <nav class="top-nav" aria-label="Quick navigation">
+      <button data-nav="signspeak">Projects</button>
+      <button data-nav="skills">Skills</button>
+      <button data-nav="contact">Contact</button>
+      <a href="resume.pdf" download class="nav-resume">⬇ Resume</a>
+    </nav>
+  </header>
+
+  <!-- Viewport / World -->
+  <main id="viewport" aria-label="Portfolio world map. Drag to explore, scroll to zoom, click a building.">
+    <div id="world">
+      <!-- ===== Master art library: gradients & filters shared by every illustration ===== -->
+      <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+        <radialGradient id="gShadow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#4A3214" stop-opacity=".30"/><stop offset=".65" stop-color="#4A3214" stop-opacity=".13"/><stop offset="1" stop-color="#4A3214" stop-opacity="0"/></radialGradient>
+        <linearGradient id="gWater" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7EDBF5"/><stop offset=".55" stop-color="#3FC2EA"/><stop offset="1" stop-color="#23A6D5"/></linearGradient>
+        <linearGradient id="gWaterLt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B9F1FD"/><stop offset="1" stop-color="#6ED3F0"/></linearGradient>
+        <radialGradient id="gWaterDeep" cx="50%" cy="36%" r="78%"><stop offset="0" stop-color="#B9F1FD"/><stop offset=".55" stop-color="#54CDF2"/><stop offset="1" stop-color="#2CAEDB"/></radialGradient>
+        <linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE98A"/><stop offset=".55" stop-color="#FFC93C"/><stop offset="1" stop-color="#E19E06"/></linearGradient>
+        <linearGradient id="gGoldRoof" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F8D678"/><stop offset=".6" stop-color="#ECB84A"/><stop offset="1" stop-color="#CE9427"/></linearGradient>
+        <linearGradient id="gRoofSlate" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#85909C"/><stop offset=".55" stop-color="#5D6873"/><stop offset="1" stop-color="#414B56"/></linearGradient>
+        <linearGradient id="gRoofSlate2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#78838E"/><stop offset=".55" stop-color="#525D68"/><stop offset="1" stop-color="#39434E"/></linearGradient>
+        <linearGradient id="gRoofGreen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#96D4B1"/><stop offset=".55" stop-color="#63AC85"/><stop offset="1" stop-color="#458468"/></linearGradient>
+        <linearGradient id="gThatch" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E6C37C"/><stop offset=".55" stop-color="#BE9653"/><stop offset="1" stop-color="#93702F"/></linearGradient>
+        <linearGradient id="gRoofBrown" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B9834C"/><stop offset=".6" stop-color="#96622F"/><stop offset="1" stop-color="#774B20"/></linearGradient>
+        <linearGradient id="gWood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#96633A"/><stop offset=".6" stop-color="#6F4525"/><stop offset="1" stop-color="#55331A"/></linearGradient>
+        <linearGradient id="gWoodLight" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C68E51"/><stop offset=".6" stop-color="#A06A38"/><stop offset="1" stop-color="#7E5223"/></linearGradient>
+        <linearGradient id="gWoodPost" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#B9834C"/><stop offset=".55" stop-color="#7C4F27"/><stop offset="1" stop-color="#5C3A1B"/></linearGradient>
+        <linearGradient id="gCream" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFCF0"/><stop offset=".7" stop-color="#FBF0D2"/><stop offset="1" stop-color="#F1DCAB"/></linearGradient>
+        <linearGradient id="gStone" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F0EADA"/><stop offset=".6" stop-color="#D3C9B0"/><stop offset="1" stop-color="#AEA384"/></linearGradient>
+        <linearGradient id="gStoneDk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D2CBB6"/><stop offset=".6" stop-color="#ABA088"/><stop offset="1" stop-color="#857C66"/></linearGradient>
+        <linearGradient id="gPlinth" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F8F2DE"/><stop offset=".6" stop-color="#DED2B2"/><stop offset="1" stop-color="#BFAF87"/></linearGradient>
+        <linearGradient id="gTrunk" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#9A683D"/><stop offset=".6" stop-color="#6F4525"/><stop offset="1" stop-color="#523118"/></linearGradient>
+        <linearGradient id="gPillarRed" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#F07C5F"/><stop offset=".5" stop-color="#D9503C"/><stop offset="1" stop-color="#AC3322"/></linearGradient>
+        <radialGradient id="gLeaf" cx="38%" cy="28%" r="82%"><stop offset="0" stop-color="#97D184"/><stop offset=".62" stop-color="#5E9A5E"/><stop offset="1" stop-color="#477C46"/></radialGradient>
+        <radialGradient id="gLeafLt" cx="38%" cy="28%" r="82%"><stop offset="0" stop-color="#C2E7A9"/><stop offset=".6" stop-color="#83C173"/><stop offset="1" stop-color="#5B9457"/></radialGradient>
+        <radialGradient id="gBlossom" cx="40%" cy="26%" r="82%"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#FDE4EF"/><stop offset="1" stop-color="#F4B4D0"/></radialGradient>
+        <radialGradient id="gBlossomPk" cx="40%" cy="26%" r="82%"><stop offset="0" stop-color="#FFF5F9"/><stop offset=".55" stop-color="#FBD0E3"/><stop offset="1" stop-color="#EE97BC"/></radialGradient>
+        <radialGradient id="gOrange" cx="35%" cy="28%" r="82%"><stop offset="0" stop-color="#FFD58F"/><stop offset=".58" stop-color="#FF9418"/><stop offset="1" stop-color="#DD6600"/></radialGradient>
+        <radialGradient id="gBolt" cx="38%" cy="30%" r="82%"><stop offset="0" stop-color="#F4E0AC"/><stop offset=".6" stop-color="#C49A58"/><stop offset="1" stop-color="#8F6A2E"/></radialGradient>
+        <linearGradient id="gGlass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#DCF7FF"/><stop offset=".55" stop-color="#8FD8F2"/><stop offset="1" stop-color="#54B2D8"/></linearGradient>
+        <linearGradient id="gGround" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FAF4E2"/><stop offset=".5" stop-color="#F7F1E3"/><stop offset="1" stop-color="#F0E3C6"/></linearGradient>
+        <linearGradient id="gRoad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="1700"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#FAF3DE"/></linearGradient>
+        <linearGradient id="gRed" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F07A5F"/><stop offset=".6" stop-color="#D9503C"/><stop offset="1" stop-color="#A83222"/></linearGradient>
+        <linearGradient id="gRock" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#DECDA8"/><stop offset=".6" stop-color="#B7A279"/><stop offset="1" stop-color="#93825C"/></linearGradient>
+        <filter id="fSoft" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="16"/></filter>
+        <filter id="fSoftSm" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="5"/></filter>
+        <pattern id="pSpeck" width="46" height="46" patternUnits="userSpaceOnUse"><circle cx="8" cy="10" r="1.7" fill="#D9C69A" opacity=".32"/><circle cx="30" cy="34" r="1.4" fill="#C9B37E" opacity=".28"/><circle cx="38" cy="6" r="1.1" fill="#FFFDF4" opacity=".5"/><circle cx="18" cy="24" r="1" fill="#D9C69A" opacity=".22"/></pattern>
+      </defs></svg>
+
+      <!-- Ground / scenery SVG -->
+      <img class="terrain-base" src="assets/terrain.webp" alt="" draggable="false" aria-hidden="true">
+      <div class="grain" aria-hidden="true"></div>
+
+      <!-- Animated ground effects on their own layer: the static ground above rasterizes once and is never repainted by these -->
+      <svg class="ground-fx" viewBox="0 0 2600 1700" preserveAspectRatio="none" aria-hidden="true">
+        <g stroke="#FFFFFF" stroke-linecap="round" fill="none">
+          <path class="shimmer" d="M180,34 q60,-8 120,0" stroke-width="7" opacity=".5"/>
+          <path class="shimmer" d="M620,66 q70,-8 140,2" stroke-width="6" opacity=".4" style="animation-delay:1.1s"/>
+          <path class="shimmer" d="M1620,48 q70,-8 140,2" stroke-width="7" opacity=".45" style="animation-delay:2s"/>
+          <path class="shimmer" d="M2180,58 q60,-6 120,2" stroke-width="6" opacity=".4" style="animation-delay:.5s"/>
+        </g>
+        <g fill="none" stroke="#FFFFFF">
+          <ellipse class="ripple" cx="1080" cy="96" rx="46" ry="10" stroke-width="3" opacity=".55"/>
+          <ellipse class="ripple" cx="1560" cy="82" rx="38" ry="8" stroke-width="3" opacity=".5" style="animation-delay:1.4s"/>
+          <ellipse class="ripple" cx="420" cy="80" rx="34" ry="8" stroke-width="3" opacity=".45" style="animation-delay:2.2s"/>
+          <ellipse class="ripple" cx="858" cy="782" rx="86" ry="30" stroke-width="3" opacity=".55"/>
+          <ellipse class="ripple" cx="858" cy="782" rx="52" ry="17" stroke-width="3" opacity=".6" style="animation-delay:1.3s"/>
+          <ellipse class="ripple" cx="1794" cy="765" rx="64" ry="20" stroke-width="3" opacity=".5" style="animation-delay:.7s"/>
+        </g>
+        <g fill="#FFD94A">
+          <path class="twinkle" transform="translate(1010,246)" d="M0,-11 L3,-3 L11,0 L3,3 L0,11 L-3,3 L-11,0 L-3,-3 Z"/>
+          <path class="twinkle" transform="translate(2490,296)" d="M0,-11 L3,-3 L11,0 L3,3 L0,11 L-3,3 L-11,0 L-3,-3 Z" style="animation-delay:.8s"/>
+          <path class="twinkle" transform="translate(86,690)" d="M0,-10 L2.6,-2.6 L10,0 L2.6,2.6 L0,10 L-2.6,2.6 L-10,0 L-2.6,-2.6 Z" style="animation-delay:1.6s"/>
+          <path class="twinkle" transform="translate(1760,1346)" d="M0,-10 L2.6,-2.6 L10,0 L2.6,2.6 L0,10 L-2.6,2.6 L-10,0 L-2.6,-2.6 Z" style="animation-delay:2.3s"/>
+          <path class="twinkle" transform="translate(1560,1080)" d="M0,-9 L2.4,-2.4 L9,0 L2.4,2.4 L0,9 L-2.4,2.4 L-9,0 L-2.4,-2.4 Z" style="animation-delay:.4s"/>
+        </g>
+      </svg>
+
+
+      <!-- Warm light: sun glow + golden wash -->
+      <div class="sun-glow" aria-hidden="true"></div>
+      <div class="warmth" aria-hidden="true"></div>
+      <!-- Drifting cloud shadows -->
+      <div class="cloud-shadows" aria-hidden="true">
+        <div class="cshadow" style="left:180px;top:330px;width:420px;animation-duration:34s"></div>
+        <div class="cshadow" style="left:1150px;top:760px;width:520px;animation-duration:42s;animation-delay:-14s"></div>
+        <div class="cshadow" style="left:1850px;top:240px;width:380px;animation-duration:30s;animation-delay:-7s"></div>
+        <div class="cshadow" style="left:640px;top:1180px;width:460px;animation-duration:38s;animation-delay:-21s"></div>
+      </div>
+
+      <!-- Rendered props (cutouts from the shared clay-render prop sheet) -->
+      <div class="prop" style="left:90px;top:1490px;width:160px"><img src="assets/prop-blossom.webp" alt="" draggable="false"></div>
+      <div class="prop" style="left:820px;top:1500px;width:150px"><img src="assets/prop-greentree.webp" alt="" draggable="false"></div>
+      <div class="prop" style="left:2460px;top:820px;width:130px"><img src="assets/prop-rock.webp" alt="" draggable="false"></div>
+      <div class="prop" style="left:1500px;top:1560px;width:150px"><img src="assets/prop-flowers.webp" alt="" draggable="false"></div>
+      <div class="prop" style="left:700px;top:1580px;width:90px"><img src="assets/prop-mushroom.webp" alt="" draggable="false"></div>
+
+      <!-- Drifting petals -->
+      <div class="petal" style="left:600px;top:300px;animation-duration:11s"></div>
+      <div class="petal" style="left:920px;top:830px;animation-duration:13s;animation-delay:2s"></div>
+      <div class="petal" style="left:130px;top:1330px;animation-duration:10s;animation-delay:4s"></div>
+      <div class="petal" style="left:2450px;top:820px;animation-duration:12s;animation-delay:1s"></div>
+      <div class="petal" style="left:1640px;top:920px;animation-duration:14s;animation-delay:5.5s"></div>
+
+      <!-- 1 Fountain / About -->
+      <button class="building" data-zone="about" style="left:1040px;top:400px;width:500px;height:420px" aria-label="About — Fountain Plaza">
+        <span class="b-svg art"><img src="assets/fountain.webp" alt="" draggable="false" style="width:380px"></span>
+        <span class="sign">🐾 About 🐾</span>
+      </button>
+
+      <!-- 4 JanMind Temple -->
+      <button class="building" data-zone="janmind" style="left:590px;top:430px;width:360px;height:400px" aria-label="JanMind Temple">
+        <span class="b-svg art"><img src="assets/temple.webp" alt="" draggable="false" style="width:330px"></span>
+        <span class="sign">🐾 JanMind 🐾</span>
+      </button>
+
+      <!-- 8 Achievements Well -->
+      <button class="building" data-zone="achievements" style="left:2040px;top:430px;width:320px;height:390px" aria-label="Achievements — Trophy Well">
+        <span class="b-svg art"><img src="assets/well.webp" alt="" draggable="false" style="width:250px"></span>
+        <span class="sign">🐾 Achievements 🐾</span>
+      </button>
+
+      <!-- 3 StudyGen Pagoda -->
+      <button class="building" data-zone="studygen" style="left:130px;top:830px;width:470px;height:450px" aria-label="StudyGen AI Pagoda">
+        <span class="b-svg art"><img src="assets/pagoda.webp" alt="" draggable="false" style="width:440px"></span>
+        <span class="sign">🐾 StudyGen AI 🐾</span>
+      </button>
+
+      <!-- 2 SignSpeak Pavilion HERO -->
+      <button class="building hero" data-zone="signspeak" style="left:1005px;top:790px;width:590px;height:470px" aria-label="SignSpeak AI Pavilion">
+        <span class="b-svg art"><img src="assets/pavilion.webp" alt="" draggable="false" style="width:560px"></span>
+        <span class="sign big">🐾 SignSpeak AI 🐾</span>
+      </button>
+
+      <!-- 5 SocioTrack Village -->
+      <button class="building" data-zone="sociotrack" style="left:1810px;top:820px;width:510px;height:380px" aria-label="SocioTrack Village">
+        <span class="b-svg art"><img src="assets/huts.webp" alt="" draggable="false" style="width:460px"></span>
+        <span class="sign">🐾 SocioTrack 🐾</span>
+      </button>
+
+      <!-- 6 FinGame Stall -->
+      <button class="building" data-zone="fingame" style="left:230px;top:1310px;width:380px;height:380px" aria-label="FinGame Market Stall">
+        <span class="b-svg art"><img src="assets/cart.webp" alt="" draggable="false" style="width:320px"></span>
+        <span class="sign">🐾 FinGame 🐾</span>
+      </button>
+
+      <!-- 7 Skills Workshop -->
+      <button class="building" data-zone="skills" style="left:1660px;top:1220px;width:470px;height:390px" aria-label="Skills Workshop">
+        <span class="b-svg art"><img src="assets/workshop.webp" alt="" draggable="false" style="width:400px"></span>
+        <span class="sign">🐾 Skills 🐾</span>
+      </button>
+
+      <!-- 9 Contact Tree -->
+      <button class="building" data-zone="contact" style="left:2230px;top:1080px;width:380px;height:460px" aria-label="Contact Tree">
+        <span class="b-svg art"><img src="assets/orangetree.webp" alt="" draggable="false" style="width:320px"></span>
+        <span class="sign">🐾 Contact 🐾</span>
+      </button>
+
+      <!-- 10 Portfolio wooden sign -->
+      <button class="building portfolio-sign" data-zone="overview" style="left:1020px;top:1430px;width:560px;height:210px" aria-label="Portfolio — Overview">
+        <span class="b-svg"><svg viewBox="0 0 560 190"><ellipse cx="280" cy="176" rx="238" ry="12" fill="url(#gShadow)"/>
+          <rect x="150" y="96" width="24" height="84" rx="6" fill="url(#gWoodPost)"/><rect x="386" y="96" width="24" height="84" rx="6" fill="url(#gWoodPost)"/>
+          <rect x="28" y="16" width="504" height="100" rx="21" fill="url(#gWood)"/>
+          <g stroke="#3E2413" stroke-width="2.6" opacity=".45"><line x1="36" y1="49" x2="524" y2="49"/><line x1="36" y1="82" x2="524" y2="82"/></g>
+          <g stroke="#2E1A0C" stroke-width="2" fill="none" opacity=".35"><path d="M70,34 q50,-6 110,0 M330,100 q60,-6 120,0 M120,66 q40,5 90,0"/></g>
+          <g stroke="#FFFFFF" stroke-width="2" fill="none" opacity=".13"><path d="M80,40 q70,-5 140,1 M300,72 q60,5 130,0"/></g>
+          <rect x="28" y="16" width="504" height="100" rx="21" fill="none" stroke="#3E2413" stroke-width="6"/>
+          <rect x="40" y="27" width="480" height="78" rx="15" fill="none" stroke="#C89B62" stroke-width="2.6" opacity=".65"/>
+          <g><circle cx="58" cy="44" r="7" fill="url(#gBolt)"/><circle cx="502" cy="44" r="7" fill="url(#gBolt)"/><circle cx="58" cy="88" r="7" fill="url(#gBolt)"/><circle cx="502" cy="88" r="7" fill="url(#gBolt)"/><g stroke="#5C4216" stroke-width="2"><path d="M54,44 h8 M58,40 v8 M498,44 h8 M502,40 v8 M54,88 h8 M58,84 v8 M498,88 h8 M502,84 v8"/></g></g>
+          <text x="280" y="91" font-size="58" text-anchor="middle" fill="#2E1A0C" opacity=".45" font-family="'Baloo 2',sans-serif" font-weight="800" letter-spacing="2">Portfolio</text>
+          <text x="280" y="87" font-size="58" text-anchor="middle" fill="#FFFFFF" font-family="'Baloo 2',sans-serif" font-weight="800" letter-spacing="2">Portfolio</text>
+        </svg></span>
+      </button>
+
+      <!-- Drifting clouds -->
+      <div class="clouds" aria-hidden="true">
+        <div class="cloud" style="left:120px;top:36px;animation-duration:36s"><i></i><i></i><i></i></div>
+        <div class="cloud" style="left:760px;top:-14px;animation-duration:44s;animation-delay:-18s"><i></i><i></i><i></i></div>
+        <div class="cloud" style="left:1560px;top:52px;animation-duration:39s;animation-delay:-9s"><i></i><i></i><i></i></div>
+        <div class="cloud" style="left:2140px;top:8px;animation-duration:47s;animation-delay:-27s"><i></i><i></i><i></i></div>
+        <div class="cloud small" style="left:420px;top:150px;animation-duration:31s;animation-delay:-5s"><i></i><i></i><i></i></div>
+      </div>
+
+      <!-- Butterflies -->
+      <div class="butterfly bf1" aria-hidden="true"><svg viewBox="0 0 40 30"><g class="bf-wl"><ellipse cx="11" cy="13" rx="10" ry="7" fill="#F28BB4"/><ellipse cx="12" cy="21" rx="7" ry="5" fill="#F7BCD6"/></g><g class="bf-wr"><ellipse cx="29" cy="13" rx="10" ry="7" fill="#F28BB4"/><ellipse cx="28" cy="21" rx="7" ry="5" fill="#F7BCD6"/></g><rect x="18.4" y="7" width="3.2" height="17" rx="1.6" fill="#6B4226"/></svg></div>
+      <div class="butterfly bf2" aria-hidden="true"><svg viewBox="0 0 40 30"><g class="bf-wl"><ellipse cx="11" cy="13" rx="10" ry="7" fill="#FFC93C"/><ellipse cx="12" cy="21" rx="7" ry="5" fill="#FFE9A8"/></g><g class="bf-wr"><ellipse cx="29" cy="13" rx="10" ry="7" fill="#FFC93C"/><ellipse cx="28" cy="21" rx="7" ry="5" fill="#FFE9A8"/></g><rect x="18.4" y="7" width="3.2" height="17" rx="1.6" fill="#6B4226"/></svg></div>
+
+      <!-- Walking avatar mascot -->
+      <div id="avatar" style="left:1560px;top:700px" aria-hidden="true"><img src="assets/avatar.webp" alt="" draggable="false"></div>
+    </div>
+  </main>
+
+  <!-- Bottom chrome -->
+  <div class="hint-pill">🖱️ Drag to explore &nbsp;·&nbsp; Scroll to zoom &nbsp;·&nbsp; Click a building</div>
+  <div class="zoom-controls" aria-label="Zoom controls">
+    <button id="zoom-in" aria-label="Zoom in">＋</button>
+    <button id="zoom-out" aria-label="Zoom out">－</button>
+    <button id="zoom-reset" aria-label="Reset view">⌂</button>
+  </div>
+
+  <!-- Panel -->
+  <div id="panel-backdrop"></div>
+  <aside id="panel" aria-hidden="true" aria-label="Detail panel">
+    <button id="back-btn">← Back</button>
+    <div id="panel-content"></div>
+  </aside>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

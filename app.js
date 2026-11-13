@@ -130,7 +130,35 @@ var avatarEl=document.getElementById('avatar');
 var AVATAR_POS={about:[1560,680],janmind:[1000,780],achievements:[2390,745],studygen:[640,1180],signspeak:[1640,1160],sociotrack:[2330,1090],fingame:[650,1590],skills:[2180,1560],contact:[2280,1490],overview:[1620,1580]};
 var avatarCur={x:parseInt(avatarEl.style.left)||1560,y:parseInt(avatarEl.style.top)||700};
 var reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-var walkRaf=null, walkTarget=null, lastPuffT=0, lastSparkT=0;
+var walkRaf=null, walkTarget=null, lastSparkT=0;
+var shadowEl=document.getElementById('avatar-shadow');
+function setIdle(on){avatarEl.classList.toggle('idle',!!on)}
+var faceX=1, turnT=1, turnFrom=1;
+function updateFacing(vx){
+  if(Math.abs(vx)<30)return;
+  var want=vx<0?-1:1;
+  if(want!==faceX && turnT>=1){turnFrom=faceX; faceX=want; turnT=0; avatarEl.style.setProperty('--flip',faceX);}
+}
+function currentScaleX(dt){
+  if(turnT<1){turnT=Math.min(1,turnT+dt/0.16); return turnFrom*Math.cos(turnT*Math.PI);}
+  return faceX;
+}
+function renderAvatar(x,y,bob,lean,sx){
+  avatarCur={x:x,y:y};
+  avatarEl.style.left=x+'px'; avatarEl.style.top=y+'px';
+  avatarEl.style.transform='translate(-50%,-100%) scaleX('+sx+') translateY('+(-bob)+'px) rotate('+lean+'deg)';
+  if(shadowEl){
+    shadowEl.style.left=x+'px'; shadowEl.style.top=y+'px';
+    var s=Math.max(.72,1-bob*0.022);
+    shadowEl.style.transform='scale('+s+')';
+    shadowEl.style.opacity=String(Math.max(.55,.9-bob*0.03));
+  }
+}
+function restShadow(){
+  if(!shadowEl)return;
+  shadowEl.style.left=avatarCur.x+'px'; shadowEl.style.top=avatarCur.y+'px';
+  shadowEl.style.transform='scale(1)'; shadowEl.style.opacity='0.9';
+}
 function spawnFx(cls,x,y){
   var s=document.createElement('div'); s.className=cls;
   s.style.left=x+'px'; s.style.top=y+'px'; world.appendChild(s);
@@ -149,9 +177,9 @@ function arrivalHop(x,y){
   function step(t){
     var p=Math.min(1,(t-t0)/dur);
     var hop=Math.abs(Math.sin(p*Math.PI*2))*16;
-    avatarEl.style.transform='translate(-50%,-100%) scaleX(var(--flip,1)) translateY('+(-hop)+'px)';
+    avatarEl.style.transform='translate(-50%,-100%) scaleX('+faceX+') translateY('+(-hop)+'px)';
     if(p<1){walkRaf=requestAnimationFrame(step)}
-    else{walkRaf=null; avatarEl.style.transform=''; avatarEl.style.transition='';}
+    else{walkRaf=null; avatarEl.style.transform=''; avatarEl.style.transition=''; restShadow(); setIdle(true);}
   }
   walkRaf=requestAnimationFrame(step);
   burst(x,y);
@@ -164,16 +192,16 @@ function moveAvatar(id){
   walkTarget=id;
   var sx=avatarCur.x, sy=avatarCur.y, dx=p[0]-sx, dy=p[1]-sy;
   var dist=Math.hypot(dx,dy);
-  if(dx!==0)avatarEl.style.setProperty('--flip', dx<0?-1:1);
   if(reducedMotion || dist<8){
-    avatarCur={x:p[0],y:p[1]};
+    if(dx!==0){faceX=dx<0?-1:1; avatarEl.style.setProperty('--flip',faceX);}
     avatarEl.style.transition='none';
-    avatarEl.style.left=p[0]+'px'; avatarEl.style.top=p[1]+'px';
+    renderAvatar(p[0],p[1],0,0,faceX);
     void avatarEl.offsetWidth; avatarEl.style.transition='';
-    avatarEl.style.transform=''; walkTarget=null; walkRaf=null;
+    avatarEl.style.transform=''; restShadow(); walkTarget=null; walkRaf=null; setIdle(true);
     return;
   }
   if(dist<40){ /* already there: just do the happy hop */
+    if(dx!==0){faceX=dx<0?-1:1; avatarEl.style.setProperty('--flip',faceX);}
     avatarCur={x:p[0],y:p[1]};
     avatarEl.style.left=p[0]+'px'; avatarEl.style.top=p[1]+'px';
     walkTarget=null; arrivalHop(p[0],p[1]);
@@ -188,23 +216,28 @@ function moveAvatar(id){
   var dur=Math.min(2400,Math.max(550,dist/620*1000));
   var steps=Math.max(3,Math.round(dist/85));
   var t0=performance.now();
+  var prevPh=0, px=sx, pt=t0;
   avatarEl.style.transition='none'; /* positions are driven frame-by-frame now */
+  setIdle(false);
   function frame(t){
     var raw=Math.min(1,(t-t0)/dur);
     var e=raw*raw*(3-2*raw); /* smoothstep: soft start, soft landing */
     var u=1-e;
     var x=u*u*sx + 2*u*e*cx + e*e*p[0];
     var y=u*u*sy + 2*u*e*cy + e*e*p[1];
-    avatarCur={x:x,y:y};
-    avatarEl.style.left=x+'px'; avatarEl.style.top=y+'px';
+    var dtF=Math.max(0.001,(t-pt)/1000); pt=t;
+    updateFacing((x-px)/dtF); px=x;
+    var sx2=currentScaleX(dtF);
     var ph=e*steps;
-    var bob=Math.abs(Math.sin(ph*Math.PI))*9; /* little bounce on every step */
-    var waddle=Math.sin(ph*Math.PI*2)*3.5; /* side-to-side waddle */
-    avatarEl.style.transform='translate(-50%,-100%) scaleX(var(--flip,1)) translateY('+(-bob)+'px) rotate('+waddle+'deg)';
-    if(t-lastPuffT>120){lastPuffT=t; spawnPuff(x,y);}
+    var speedF=Math.min(1,(6*raw*(1-raw))/1.5); /* peaks mid-walk */
+    var bob=Math.abs(Math.sin(ph*Math.PI))*9*(0.4+0.6*speedF); /* bounce grows with speed */
+    var lean=Math.sin(ph*Math.PI*2)*3.5 + speedF*2.5; /* waddle + forward lean */
+    renderAvatar(x,y,bob,lean,sx2);
+    if(Math.floor(ph)>Math.floor(prevPh))spawnPuff(x,y); /* a puff lands on each step */
+    prevPh=ph;
     if(t-lastSparkT>340){lastSparkT=t; spawnSparkle(x,y,26);}
     if(raw<1){walkRaf=requestAnimationFrame(frame)}
-    else{walkRaf=null; walkTarget=null; avatarEl.style.transform=''; avatarEl.style.transition=''; arrivalHop(p[0],p[1]);}
+    else{walkRaf=null; walkTarget=null; avatarEl.style.transform=''; avatarEl.style.transition=''; restShadow(); arrivalHop(p[0],p[1]);}
   }
   walkRaf=requestAnimationFrame(frame);
 }
@@ -232,7 +265,6 @@ function bindPanelButtons(){
 }
 document.getElementById('back-btn').addEventListener('click',closePanel);
 backdrop.addEventListener('click',closePanel);
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closePanel()});
 
 /* ---------- Camera ---------- */
 var cam={x:0,y:0,scale:1}, minScale=0.12, maxScale=1.6;
@@ -257,11 +289,13 @@ function zoomAt(cx,cy,factor){
   cam.x=cx-wx*cam.scale; cam.y=cy-wy*cam.scale;
   clampCam(); applyCam();
 }
+var camFlying=false;
 function animateCamTo(tx,ty,ts,done){
   var sx=cam.x,sy=cam.y,ss=cam.scale,t0=performance.now(),dur=650;
+  camFlying=true;
   function step(t){var p=Math.min(1,(t-t0)/dur);p=1-Math.pow(1-p,3);
     cam.x=sx+(tx-sx)*p; cam.y=sy+(ty-sy)*p; cam.scale=ss+(ts-ss)*p; applyCam();
-    if(p<1)requestAnimationFrame(step); else if(done)done();}
+    if(p<1)requestAnimationFrame(step); else {camFlying=false; if(done)done();}}
   requestAnimationFrame(step);
 }
 var ZONE_POS={about:[1290,540],janmind:[770,605],achievements:[2200,585],studygen:[365,1030],signspeak:[1300,1000],sociotrack:[2065,980],fingame:[420,1470],skills:[1895,1390],contact:[2420,1285],overview:[1300,1535]};
@@ -298,13 +332,13 @@ window.addEventListener('pointermove',function(e){
   if(!dragStart)return;
   var dx=e.clientX-dragStart.x, dy=e.clientY-dragStart.y;
   moved=Math.max(moved,Math.hypot(dx,dy));
-  if(moved>4){cam.x=dragStart.camX+dx; cam.y=dragStart.camY+dy; clampCam(); applyCam();}
+  if(moved>4){followCam=false; cam.x=dragStart.camX+dx; cam.y=dragStart.camY+dy; clampCam(); applyCam();}
 });
 var suppressClick=false;
 function endPointer(e){pointers.delete(e.pointerId); if(pointers.size===0){dragStart=null; viewport.classList.remove('dragging'); suppressClick=moved>8; setTimeout(function(){suppressClick=false; moved=0;},200);}}
 window.addEventListener('pointerup',endPointer);
 window.addEventListener('pointercancel',endPointer);
-viewport.addEventListener('wheel',function(e){e.preventDefault(); zoomAt(e.clientX,e.clientY, e.deltaY<0?1.12:0.89);},{passive:false});
+viewport.addEventListener('wheel',function(e){e.preventDefault(); followCam=false; zoomAt(e.clientX,e.clientY, e.deltaY<0?1.12:0.89);},{passive:false});
 
 /* Building clicks (ignore if dragged) */
 document.querySelectorAll('.building').forEach(function(el){
@@ -316,12 +350,161 @@ document.getElementById('zoom-in').addEventListener('click',function(){zoomAt(vi
 document.getElementById('zoom-out').addEventListener('click',function(){zoomAt(viewport.clientWidth/2,viewport.clientHeight/2,0.77)});
 document.getElementById('zoom-reset').addEventListener('click',function(){closePanel(); fitView();});
 document.querySelectorAll('[data-nav]').forEach(function(b){b.addEventListener('click',function(){focusZone(b.getAttribute('data-nav'),true);})});
-document.addEventListener('keydown',function(e){
-  var step=70;
-  if(e.key==='ArrowLeft'){cam.x+=step}else if(e.key==='ArrowRight'){cam.x-=step}
-  else if(e.key==='ArrowUp'){cam.y+=step}else if(e.key==='ArrowDown'){cam.y-=step}else return;
-  clampCam(); applyCam();
-});
 window.addEventListener('resize',function(){minScale=Math.min(minScale,fitScale()); clampCam(); applyCam();});
+
+/* ---------- Game controller: free-roam walking ---------- */
+/* Building bases she cannot walk through (plinth / trunk footprints) + ponds */
+var BLOCK_RECTS=[
+ [1180,640,260,80],   /* fountain basin */
+ [700,700,180,90],    /* janmind temple base */
+ [2120,690,170,90],   /* trophy well */
+ [280,1130,220,120],  /* studygen pagoda base */
+ [1180,1100,320,120], /* signspeak pavilion base */
+ [1930,1070,300,100], /* sociotrack huts */
+ [330,1560,180,100],  /* fingame stall */
+ [1800,1480,220,110], /* skills workshop */
+ [2380,1440,120,100], /* contact tree trunk */
+ [1080,1550,440,100]  /* portfolio sign posts */
+];
+var PONDS=[[858,782,100],[1794,765,70]];
+function collide(nx,ny){
+  nx=Math.max(70,Math.min(2530,nx)); ny=Math.max(270,Math.min(1640,ny));
+  for(var i=0;i<BLOCK_RECTS.length;i++){
+    var r=BLOCK_RECTS[i];
+    if(nx>r[0]-24 && nx<r[0]+r[2]+24 && ny>r[1]-24 && ny<r[1]+r[3]+24){
+      var pl=nx-(r[0]-24), pr=(r[0]+r[2]+24)-nx, pt=ny-(r[1]-24), pb=(r[1]+r[3]+24)-ny;
+      var m=Math.min(pl,pr,pt,pb);
+      if(m===pl)nx=r[0]-24; else if(m===pr)nx=r[0]+r[2]+24; else if(m===pt)ny=r[1]-24; else ny=r[1]+r[3]+24;
+    }
+  }
+  for(var j=0;j<PONDS.length;j++){
+    var c=PONDS[j], dx=nx-c[0], dy=ny-c[1], d=Math.hypot(dx,dy), min=c[2]+24;
+    if(d<min && d>0.01){nx=c[0]+dx/d*min; ny=c[1]+dy/d*min;}
+  }
+  return [nx,ny];
+}
+var keysDown={}, dpadDown={}, runToggle=false;
+var followCam=false, nearZone=null, lastPromptHidden=true, lastEnterDisabled=true;
+var ctrlStepPhase=0, prevCtrlPhase=0, ctrlMoving=false, lastFrameT=0;
+var velX=0, velY=0;
+var enterPrompt=document.getElementById('enter-prompt');
+var enterLabel=document.getElementById('enter-prompt-label');
+var btnEnter=document.getElementById('btn-enter');
+function openZone(id){if(!PANELS[id])return; closePanel(); focusZone(id,true);}
+function goHome(){
+  closePanel(); moveAvatar('about');
+  var fs=fitScale();
+  animateCamTo((viewport.clientWidth-WORLD_W*fs)/2,(viewport.clientHeight-WORLD_H*fs)/2,fs);
+}
+function inputVector(){
+  var x=0,y=0;
+  if(keysDown['arrowup']||keysDown['w']||dpadDown['up'])y-=1;
+  if(keysDown['arrowdown']||keysDown['s']||dpadDown['down'])y+=1;
+  if(keysDown['arrowleft']||keysDown['a']||dpadDown['left'])x-=1;
+  if(keysDown['arrowright']||keysDown['d']||dpadDown['right'])x+=1;
+  if(x&&y){x*=0.7071; y*=0.7071;}
+  return [x,y];
+}
+function followCamera(dt){
+  var tx=viewport.clientWidth/2-avatarCur.x*cam.scale;
+  var ty=viewport.clientHeight/2-avatarCur.y*cam.scale;
+  var k=Math.min(1,dt*4.5);
+  cam.x+=(tx-cam.x)*k; cam.y+=(ty-cam.y)*k;
+  clampCam(); applyCam();
+}
+function updateProximity(){
+  var best=null, bd=1e9;
+  for(var i=0;i<TOUR_ORDER.length;i++){
+    var id=TOUR_ORDER[i], p=AVATAR_POS[id];
+    var d=Math.hypot(avatarCur.x-p[0],avatarCur.y-p[1]);
+    if(d<bd){bd=d; best=id;}
+  }
+  var nz=(bd<300)?best:null;
+  if(nz!==nearZone){
+    nearZone=nz;
+    if(nz){var m=TOUR_META[nz]; enterLabel.textContent=m.e+' '+m.n+' — press E to enter';}
+  }
+  var hide=!(nz && !panel.classList.contains('open'));
+  if(hide!==lastPromptHidden){enterPrompt.hidden=hide; lastPromptHidden=hide;}
+  var dis=!nz;
+  if(dis!==lastEnterDisabled){btnEnter.classList.toggle('disabled',dis); lastEnterDisabled=dis;}
+}
+function controllerTick(t){
+  requestAnimationFrame(controllerTick);
+  if(!lastFrameT)lastFrameT=t;
+  var dt=Math.min(0.05,(t-lastFrameT)/1000||0.016); lastFrameT=t;
+  var v=inputVector();
+  var panelOpen=panel.classList.contains('open');
+  var wantsMove=(v[0]||v[1]) && !panelOpen;
+  if(wantsMove && walkRaf){ /* she takes over from the tour walk */
+    cancelAnimationFrame(walkRaf); walkRaf=null; walkTarget=null;
+    avatarEl.style.transition=''; avatarEl.style.transform='';
+  }
+  /* velocity eases toward the target: she speeds up gradually and glides to a stop */
+  var targetSpeed=(runToggle||keysDown['shift'])?520:300;
+  var tvx=panelOpen?0:v[0]*targetSpeed, tvy=panelOpen?0:v[1]*targetSpeed;
+  var kv=(v[0]||v[1]) && !panelOpen?Math.min(1,dt*7):Math.min(1,dt*9);
+  velX+=(tvx-velX)*kv; velY+=(tvy-velY)*kv;
+  var spd=Math.hypot(velX,velY);
+  if(spd<8 && !(v[0]||v[1])){velX=0; velY=0; spd=0;}
+  if(spd>12 && !walkRaf && !panelOpen){
+    var nx=avatarCur.x+velX*dt, ny=avatarCur.y+velY*dt;
+    var res=collide(nx,ny); nx=res[0]; ny=res[1];
+    var movedDist=Math.hypot(nx-avatarCur.x,ny-avatarCur.y);
+    if(movedDist>0.5){
+      updateFacing(velX);
+      var sx2=currentScaleX(dt);
+      ctrlStepPhase+=movedDist/42;
+      var bobAmp=Math.min(1,spd/300); /* bounce fades as she slows */
+      var bob=reducedMotion?0:Math.abs(Math.sin(ctrlStepPhase*Math.PI))*8*bobAmp;
+      var lean=reducedMotion?0:Math.sin(ctrlStepPhase*Math.PI*2)*3*bobAmp+(spd/520)*3.5;
+      setIdle(false);
+      renderAvatar(nx,ny,bob,lean,sx2);
+      if(!reducedMotion){
+        if(Math.floor(ctrlStepPhase)>Math.floor(prevCtrlPhase))spawnPuff(nx,ny);
+        if(Math.random()<dt*1.2)spawnSparkle(nx,ny,30);
+      }
+      prevCtrlPhase=ctrlStepPhase;
+      followCam=true;
+    }
+    if(followCam && !camFlying)followCamera(dt);
+    ctrlMoving=true;
+  } else if(ctrlMoving){
+    ctrlMoving=false; velX=0; velY=0;
+    avatarEl.style.transform=''; restShadow(); setIdle(true);
+  }
+  updateProximity();
+}
+/* Keyboard: WASD / arrows to walk, Shift to run, E to enter, Esc to close */
+document.addEventListener('keydown',function(e){
+  var k=e.key.toLowerCase();
+  if(k==='escape'){closePanel(); return;}
+  if(k==='e'){if(nearZone && !panel.classList.contains('open'))openZone(nearZone); return;}
+  if(['arrowup','arrowdown','arrowleft','arrowright',' '].indexOf(k)>=0)e.preventDefault();
+  if(k==='shift'){keysDown['shift']=true; return;}
+  if(['arrowup','arrowdown','arrowleft','arrowright','w','a','s','d'].indexOf(k)>=0)keysDown[k]=true;
+});
+document.addEventListener('keyup',function(e){keysDown[e.key.toLowerCase()]=false;});
+/* On-screen D-pad: hold to walk */
+document.querySelectorAll('.dpad [data-dir]').forEach(function(b){
+  var dir=b.getAttribute('data-dir');
+  function on(e){e.preventDefault(); dpadDown[dir]=true; b.classList.add('held');}
+  function off(e){if(e)e.preventDefault(); dpadDown[dir]=false; b.classList.remove('held');}
+  b.addEventListener('pointerdown',on);
+  b.addEventListener('pointerup',off);
+  b.addEventListener('pointercancel',off);
+  b.addEventListener('pointerleave',off);
+  b.addEventListener('contextmenu',function(e){e.preventDefault();});
+});
+document.getElementById('btn-home').addEventListener('click',goHome);
+document.getElementById('btn-run').addEventListener('click',function(){
+  runToggle=!runToggle;
+  this.classList.toggle('active',runToggle);
+  this.setAttribute('aria-pressed',runToggle?'true':'false');
+});
+btnEnter.addEventListener('click',function(){if(nearZone)openZone(nearZone);});
+document.getElementById('enter-prompt-btn').addEventListener('click',function(){if(nearZone)openZone(nearZone);});
+restShadow();
+requestAnimationFrame(controllerTick);
 fitView();
 })();

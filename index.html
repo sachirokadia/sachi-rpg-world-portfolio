@@ -204,17 +204,34 @@
       <div class="butterfly bf2" aria-hidden="true"><svg viewBox="0 0 40 30"><g class="bf-wl"><ellipse cx="11" cy="13" rx="10" ry="7" fill="#FFC93C"/><ellipse cx="12" cy="21" rx="7" ry="5" fill="#FFE9A8"/></g><g class="bf-wr"><ellipse cx="29" cy="13" rx="10" ry="7" fill="#FFC93C"/><ellipse cx="28" cy="21" rx="7" ry="5" fill="#FFE9A8"/></g><rect x="18.4" y="7" width="3.2" height="17" rx="1.6" fill="#6B4226"/></svg></div>
 
       <!-- Walking avatar mascot -->
-      <div id="avatar" style="left:1560px;top:700px" aria-hidden="true"><img src="assets/avatar.webp" alt="" draggable="false"></div>
+      <div id="avatar-shadow" style="left:1560px;top:700px" aria-hidden="true"></div>
+      <div id="avatar" class="idle" style="left:1560px;top:700px" aria-hidden="true"><img src="assets/avatar.webp" alt="" draggable="false"></div>
     </div>
   </main>
 
   <!-- Bottom chrome -->
-  <div class="hint-pill">🖱️ Drag to explore &nbsp;·&nbsp; Scroll to zoom &nbsp;·&nbsp; Click a building</div>
+  <div class="hint-pill">🎮 Walk with WASD / arrows or the D-pad &nbsp;·&nbsp; Walk up to a building &amp; press E to enter</div>
   <div class="zoom-controls" aria-label="Zoom controls">
     <button id="zoom-in" aria-label="Zoom in">＋</button>
     <button id="zoom-out" aria-label="Zoom out">－</button>
     <button id="zoom-reset" aria-label="Reset view">⌂</button>
   </div>
+
+  <!-- Game controller -->
+  <div class="controller" aria-label="Game controller">
+    <div class="dpad" role="group" aria-label="Move">
+      <button data-dir="up" aria-label="Move up">▲</button>
+      <button data-dir="left" aria-label="Move left">◀</button>
+      <button id="btn-home" aria-label="Walk home to the fountain">⌂</button>
+      <button data-dir="right" aria-label="Move right">▶</button>
+      <button data-dir="down" aria-label="Move down">▼</button>
+    </div>
+  </div>
+  <div class="action-cluster">
+    <button id="btn-enter" class="disabled" aria-label="Enter nearest place">Ⓐ<span>Enter</span></button>
+    <button id="btn-run" aria-label="Toggle run" aria-pressed="false">🏃<span>Run</span></button>
+  </div>
+  <div id="enter-prompt" hidden><button id="enter-prompt-btn"><span id="enter-prompt-label"></span><i>E</i></button></div>
 
   <!-- Panel -->
   <div id="panel-backdrop"></div>

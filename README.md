@@ -38,5 +38,5 @@ Achievements (Trophy Well) · Contact Tree · Portfolio sign (Overview)
 ## Files
 `index.html` · `styles.css` · `app.js` · `resume.pdf`
 
-## Artwork (v5 — realistic edition)
-The nine landmarks are AI-generated soft-3D-rendered illustrations (clay-render storybook style), background-removed and saved as alpha WebP in `assets/`. The walking avatar is a semi-realistic full-body character in the same cream-and-orange outfit (long dark hair, cream puffer jacket, orange pleated skirt and boots); she stands at the Fountain Plaza, walks to whichever building you open (Back sends her home), and can be driven freely with the controller. Her walk has a step-synced bounce and waddle, dust puffs on every step, a ground shadow that shrinks as she lifts off, and a happy hop when she arrives. Clouds drift overhead with soft shadows, butterflies wander, and all motion honours `prefers-reduced-motion`.
+## Artwork (rendered edition)
+The nine landmarks are AI-generated soft-3D-rendered illustrations (clay-render storybook style), background-removed and saved as alpha WebP in `assets/`. The walking mascot is the original chibi avatar in the cream-and-orange outfit; she stands at the Fountain Plaza, walks to whichever building you open (Back sends her home), and can be driven freely with the controller. Her walk has a step-synced bounce and waddle, dust puffs on every step, a ground shadow that shrinks as she lifts off, and a happy hop when she arrives. Clouds drift overhead with soft shadows, butterflies wander, and all motion honours `prefers-reduced-motion`.

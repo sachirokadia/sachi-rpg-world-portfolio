@@ -142,7 +142,7 @@ button{font-family:inherit;cursor:pointer}
 .bf-wr{transform-box:fill-box;transform-origin:0% 50%;animation:flap .26s ease-in-out infinite alternate}
 @keyframes flap{from{transform:scaleX(.35)}to{transform:scaleX(1)}}
 /* ===== Walking avatar ===== */
-#avatar{position:absolute;width:78px;z-index:6;pointer-events:none;transform:translate(-50%,-100%) scaleX(var(--flip,1));transition:left .7s ease-in-out,top .7s ease-in-out;filter:drop-shadow(0 10px 8px rgba(74,50,38,.30))}
+#avatar{position:absolute;width:112px;z-index:6;pointer-events:none;transform:translate(-50%,-100%) scaleX(var(--flip,1));transition:left .7s ease-in-out,top .7s ease-in-out;filter:drop-shadow(0 10px 8px rgba(74,50,38,.30))}
 #avatar img{width:100%;height:auto;display:block}
 #avatar.walking img{animation:walkbob .16s ease-in-out infinite alternate}
 @keyframes walkbob{from{transform:translateY(0) rotate(-2deg)}to{transform:translateY(-9px) rotate(2deg)}}
@@ -155,7 +155,7 @@ button{font-family:inherit;cursor:pointer}
 /* ===== Sequential tour guide ===== */
 .tour-bar{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-top:20px;background:linear-gradient(180deg,#FFFDF4,#FFEDBE);border:3px solid #EAD9A8;border-radius:22px;padding:10px 14px;box-shadow:inset 0 2px 0 #fff,0 6px 14px rgba(74,50,38,.10)}
 .tour-bar .cta{margin-top:0;white-space:nowrap;margin-left:auto}
-.tour-guide{width:54px;height:54px;object-fit:cover;object-position:50% 12%;border-radius:50%;border:3px solid #E3D3AC;background:#FFF6DC;flex:none}
+.tour-guide{width:54px;height:54px;object-fit:cover;border-radius:50%;border:3px solid #E3D3AC;background:#FFF6DC;flex:none}
 .tour-bubble{flex:1;min-width:0;font-size:14.5px;line-height:1.4;color:#5C4216}
 .tour-eyebrow{display:block;font-size:11.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#B07A2E;margin-bottom:2px}
 .tour-bubble strong{color:#4A2C15}
@@ -187,7 +187,7 @@ button{font-family:inherit;cursor:pointer}
 #enter-prompt-btn i{font-style:normal;background:linear-gradient(180deg,#FF9A3D,#F06400);color:#fff;border-radius:8px;padding:3px 9px;font-size:13px;box-shadow:inset 0 1px 0 rgba(255,255,255,.45)}
 @keyframes promptPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
 /* Avatar ground shadow + idle breathing */
-#avatar-shadow{position:absolute;width:64px;height:16px;margin-left:-32px;margin-top:-8px;background:radial-gradient(ellipse at center,rgba(74,50,20,.38),rgba(74,50,20,.14) 55%,transparent 72%);border-radius:50%;z-index:5;pointer-events:none}
+#avatar-shadow{position:absolute;width:88px;height:22px;margin-left:-44px;margin-top:-11px;background:radial-gradient(ellipse at center,rgba(74,50,20,.38),rgba(74,50,20,.14) 55%,transparent 72%);border-radius:50%;z-index:5;pointer-events:none}
 #avatar.idle img{animation:idleBob 2.6s ease-in-out infinite}
 @keyframes idleBob{0%,100%{transform:translateY(0) scale(1,1)}50%{transform:translateY(-3px) scale(1.015,.985)}}
 
